@@ -78,7 +78,7 @@ public class SummaryActivity extends Activity {
         mThemeText = (TextView) findViewById(R.id.themeLabel);
         String theme = Data.cakeTheme;
         if (!theme.isEmpty()){
-            mThemeText.setText("Personal Theme: " + theme + " (add Rs. 400)");
+            mThemeText.setText("Personal Theme: " + theme + " (add Ksh. 400)");
             cost+=400;
         }
         else{

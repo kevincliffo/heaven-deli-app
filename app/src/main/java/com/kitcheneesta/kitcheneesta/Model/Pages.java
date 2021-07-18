@@ -45,17 +45,17 @@ public class Pages {
             R.drawable.theme_christmas
     };
     private static final OrderObject [] weightObjects = {
-            new OrderObject(R.drawable.button_bg, "0.5 Kg Cake - Rs. 600", 600),
-            new OrderObject(R.drawable.button_bg, "1 Kg Cake - Rs. 1100", 1100),
-            new OrderObject(R.drawable.button_bg, "1.5 Kg Cake - Rs. 1500", 1500),
-            new OrderObject(R.drawable.button_bg, "2 Kg Cake - Rs. 1800", 1800),
-            new OrderObject(R.drawable.button_bg, "3 Kg Cake - Rs. 2800", 2800)
+            new OrderObject(R.drawable.button_bg, "0.5 Kg Cake - Ksh. 900", 600),
+            new OrderObject(R.drawable.button_bg, "1 Kg Cake - Ksh. 1600", 1100),
+            new OrderObject(R.drawable.button_bg, "1.5 Kg Cake - Ksh. 2500", 1500),
+            new OrderObject(R.drawable.button_bg, "2 Kg Cake - Ksh. 3000", 1800),
+            new OrderObject(R.drawable.button_bg, "3 Kg Cake - Ksh. 4200", 2800)
     };
 
     public static final OrderPage weights = new OrderPage("Select The Weight of Your Cake",
             weightObjects);
     private static final OrderObject [] sugar = {
-            new OrderObject(R.drawable.button_bg, "Yes (add Rs. 100)", 100),
+            new OrderObject(R.drawable.button_bg, "Yes (add Ksh. 100)", 100),
             new OrderObject(R.drawable.button_bg, "No", 0)
     };
     public static final OrderPage sugarPage =
