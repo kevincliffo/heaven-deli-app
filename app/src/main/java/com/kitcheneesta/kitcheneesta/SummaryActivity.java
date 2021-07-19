@@ -7,21 +7,35 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.JsonRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.kitcheneesta.kitcheneesta.Model.Data;
 import com.kitcheneesta.kitcheneesta.Model.Pages;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
-
+import com.kitcheneesta.kitcheneesta.MySingleton;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class SummaryActivity extends Activity {
@@ -37,7 +51,13 @@ public class SummaryActivity extends Activity {
     private TextView mThemeText;
     private TextView mWeightText;
     private Button mChangeButton;
+    private Button mOrderButton;
+    private EditText etEmail;
+    private EditText etName;
+    private EditText etPhoneNo;
     private Intent mIntent;
+    private String ADD_ORDER_API_URL = "http://10.0.2.2:8012/heavenlydelights/api/add-order.php";
+    private int totalCost;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,9 +113,14 @@ public class SummaryActivity extends Activity {
             cost+=100;
         }
 
+        totalCost = cost;
 
         mCostText = (TextView) findViewById(R.id.finalCostLabel);
-        mCostText.setText("Total Cost: " + cost);
+        mCostText.setText("Total Cost: Ksh. " + cost);
+
+        etEmail = findViewById(R.id.email);
+        etName = findViewById(R.id.name);
+        etPhoneNo = findViewById(R.id.mobileno);
 
         mChangeButton = (Button) findViewById(R.id.changeDateButton);
         mChangeButton.setOnClickListener(new View.OnClickListener() {
@@ -104,6 +129,68 @@ public class SummaryActivity extends Activity {
                 setDateAndTime();
             }
         });
+
+        mOrderButton = findViewById(R.id.finalButton);
+        mOrderButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Add order details to db
+                addOrderToDatabase();
+            }
+        });
+    }
+
+    private void addOrderToDatabase(){
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, ADD_ORDER_API_URL,
+                new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject json = new JSONObject(response);
+                    //if (json.getString("success")) {
+
+                    Toast.makeText(getBaseContext(), json.getString("message"), Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(SummaryActivity.this, HomeActivity.class);
+
+                    startActivity(intent);
+                    ////////////////////
+                    //}
+                }
+                catch (JSONException ex)
+                {
+
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(),"failed to Register",Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("Content-Type","application/x-www-form-urlencoded");
+
+                params.put("CustomerName", etName.getText().toString());
+                params.put("CustomerEmail",etEmail.getText().toString());
+                params.put("CustomerMobileNo",etPhoneNo.getText().toString());
+                params.put("Item", "CAKE");
+                params.put("BaseFlavour",mFlavourText.getText().toString());
+                params.put("Topping",mToppingText.getText().toString());
+                params.put("Theme",mThemeText.getText().toString());
+                params.put("SugarFree",mSugarFreeText.getText().toString());
+                params.put("TotalCost", String.valueOf(totalCost));
+                params.put("OrderTime",mTimeString);
+                params.put("OrderDate", mDateString);
+                return params;
+            }
+        };
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        MySingleton.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
     }
 
     private void setDateAndTime() {

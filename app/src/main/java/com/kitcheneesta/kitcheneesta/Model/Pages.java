@@ -45,11 +45,11 @@ public class Pages {
             R.drawable.theme_christmas
     };
     private static final OrderObject [] weightObjects = {
-            new OrderObject(R.drawable.button_bg, "0.5 Kg Cake - Ksh. 900", 600),
-            new OrderObject(R.drawable.button_bg, "1 Kg Cake - Ksh. 1600", 1100),
-            new OrderObject(R.drawable.button_bg, "1.5 Kg Cake - Ksh. 2500", 1500),
-            new OrderObject(R.drawable.button_bg, "2 Kg Cake - Ksh. 3000", 1800),
-            new OrderObject(R.drawable.button_bg, "3 Kg Cake - Ksh. 4200", 2800)
+            new OrderObject(R.drawable.button_bg, "0.5 Kg Cake - Ksh. 900", 900),
+            new OrderObject(R.drawable.button_bg, "1 Kg Cake - Ksh. 1600", 1600),
+            new OrderObject(R.drawable.button_bg, "1.5 Kg Cake - Ksh. 2500", 2500),
+            new OrderObject(R.drawable.button_bg, "2 Kg Cake - Ksh. 3000", 3000),
+            new OrderObject(R.drawable.button_bg, "3 Kg Cake - Ksh. 4200", 4200)
     };
 
     public static final OrderPage weights = new OrderPage("Select The Weight of Your Cake",
